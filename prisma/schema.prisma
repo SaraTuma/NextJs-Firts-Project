@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model tasks {
+  t_id      Int        @id @default(autoincrement())
+  t_fk_user Int?
+  t_task    String[]   @db.VarChar(255)
+  t_date    DateTime[] @db.Timestamp(6)
+  users     users?     @relation(fields: [t_fk_user], references: [u_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  u_id       Int      @id @default(autoincrement())
+  u_name     String[] @db.VarChar(50)
+  u_email    String[] @unique @db.VarChar(50)
+  u_password String[] @db.VarChar(50)
+  tasks      tasks[]
+}
